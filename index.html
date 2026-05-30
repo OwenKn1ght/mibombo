@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter For You</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#ffeaf3;
+    font-family:Arial,sans-serif;
+    text-align:center;
+}
+
+.card{
+    width:90%;
+    max-width:500px;
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+.hidden{
+    display:none;
+}
+
+.item{
+    font-size:40px;
+    cursor:pointer;
+    margin:15px;
+    display:inline-block;
+    transition:.2s;
+}
+
+.item:hover{
+    transform:scale(1.2);
+}
+
+button{
+    border:none;
+    padding:12px 20px;
+    border-radius:12px;
+    cursor:pointer;
+    margin:8px;
+    font-size:16px;
+}
+
+.primary{
+    background:#ff73aa;
+    color:white;
+}
+
+.secondary{
+    background:#eee;
+}
+
+#message{
+    min-height:50px;
+    margin-top:10px;
+    white-space:pre-line;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+
+    <!-- PAGE 1 -->
+    <div id="start">
+        <h1>💌 A Letter For You</h1>
+
+        <p>
+            Hey, Kaevin.
+            <br><br>
+            I accidentally lost three pieces of a letter.
+            Would you help me find them?
+            <br><br>
+            I promise it's worth it.
+        </p>
+
+        <button class="primary" onclick="startSearch()">
+            Start Searching
+        </button>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div id="game" class="hidden">
+
+        <h2>Find the 3 Missing Pieces</h2>
+
+        <p id="progress">0 / 3 pieces found</p>
+
+        <div>
+            <span class="item" onclick="wrongChoice()">☁️</span>
+            <span class="item" onclick="foundPiece(this,1)">📚</span>
+            <span class="item" onclick="wrongChoice()">🧸</span>
+            <span class="item" onclick="foundPiece(this,2)">🌷</span>
+            <span class="item" onclick="wrongChoice()">⭐</span>
+            <span class="item" onclick="foundPiece(this,3)">🌙</span>
+        </div>
+
+        <p id="message"></p>
+
+        <button id="continueBtn"
+        class="primary hidden"
+        onclick="goToLetter()">
+            Restore The Letter 💌
+        </button>
+
+    </div>
+
+    <!-- PAGE 3 -->
+    <div id="letterReady" class="hidden">
+
+        <h2>The Letter Has Been Restored</h2>
+
+        <p>
+            Looks like you've found all the missing pieces.
+            <br><br>
+            The letter can finally be read.
+        </p>
+
+        <button id="openBtn"
+        class="primary"
+        onclick="openLetter()">
+            Open The Letter 💌
+        </button>
+
+        <button id="laterBtn"
+        class="secondary"
+        onclick="growButton()">
+            Maybe Later
+        </button>
+
+    </div>
+
+    <!-- PAGE 4 -->
+    <div id="finalLetter" class="hidden">
+
+        <h1>💌</h1>
+
+        <p>Hi, Kaevin..</p>
+
+        <p>
+            I'm not very good at saying things like this out loud.
+        </p>
+
+        <p>
+            That's why I ended up making this little website.
+        </p>
+
+        <p>
+            Maybe it's a little silly.
+        </p>
+
+        <p>
+            Maybe it's a little unexpected, and it makes me look like a coward..
+        </p>
+
+        <p>
+            But after all the searching,
+            all the clues,
+            and all the missing pieces...
+        </p>
+
+        <h2>There's something I've been wanting to tell you.</h2>
+
+        <h2>I like you.</h2>
+
+        <p>
+            You don't have to say anything right now.
+        </p>
+
+        <p>
+            I simply wanted you to know.
+        </p>
+
+    </div>
+
+</div>
+
+<script>
+
+let found = 0;
+let buttonSize = 16;
+
+function startSearch(){
+    document.getElementById("start").classList.add("hidden");
+    document.getElementById("game").classList.remove("hidden");
+}
+
+function wrongChoice(){
+
+    const messages = [
+        "Not this one..",
+        "Try looking somewhere else!",
+        "Almost, but not quite",
+        "One of the pieces is still hiding :O"
+    ];
+
+    document.getElementById("message").innerText =
+    messages[Math.floor(Math.random()*messages.length)];
+}
+
+function foundPiece(element, number){
+
+    if(element.dataset.found) return;
+
+    element.dataset.found = true;
+
+    found++;
+
+    const pieces = [
+        "...every conversation with you...",
+        "...always became one of the best parts of my day...",
+        "...and there's something I've wanted to tell you..."
+    ];
+
+    document.getElementById("message").innerText =
+    "Piece found!\n\n" + pieces[number - 1];
+
+    element.style.opacity = "0.4";
+
+    document.getElementById("progress").innerText =
+    found + " / 3 pieces found";
+
+    if(found === 3){
+        document.getElementById("continueBtn")
+        .classList.remove("hidden");
+    }
+}
+
+function goToLetter(){
+    document.getElementById("game").classList.add("hidden");
+    document.getElementById("letterReady").classList.remove("hidden");
+}
+
+function growButton(){
+
+    buttonSize += 8;
+
+    document.getElementById("openBtn")
+    .style.fontSize = buttonSize + "px";
+
+    const texts = [
+        "Are you sure? :C",
+        "Really sure? :3",
+        "You've come this far...",
+        "Just a little more__<",
+        "Come on, open it >:|"
+    ];
+
+    document.getElementById("laterBtn").innerText =
+    texts[Math.floor(Math.random()*texts.length)];
+}
+
+function openLetter(){
+    document.getElementById("letterReady").classList.add("hidden");
+    document.getElementById("finalLetter").classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
